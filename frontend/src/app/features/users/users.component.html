@@ -1,0 +1,385 @@
+<style>
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .new-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    transition: all 0.2s;
+  }
+  .new-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+  }
+
+  .users-table {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  .thead-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 140px 100px 120px 110px;
+    gap: 12px;
+    padding: 11px 20px;
+    background: #0f172a;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center;
+  }
+  .user-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 140px 100px 120px 110px;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f8fafc;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .user-row:last-child {
+    border-bottom: none;
+  }
+  .user-row:hover {
+    background: #fafbff;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .user-email {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .user-name {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 1px;
+  }
+
+  .role-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .status-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .status-active {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .status-inactive {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .date-text {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  .action-row {
+    display: flex;
+    gap: 6px;
+  }
+  .act-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .act-btn:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+  .act-btn.danger:hover {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  }
+  .modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+  }
+  .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 5px;
+  }
+  .field-input {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.875rem;
+    color: #0f172a;
+    outline: none;
+    width: 100%;
+    background: #fff;
+    transition: border 0.2s;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  .field-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+  .btn-save {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-save:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-cancel {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+  }
+</style>
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <div class="page-title">Gestion des utilisateurs 👥</div>
+    <div class="page-sub">{{ users.length }} utilisateur(s) enregistré(s)</div>
+  </div>
+  <button class="new-btn" (click)="openCreate()">➕ Nouvel utilisateur</button>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="d-flex align-items-center justify-content-center py-5">
+  <div class="spinner-border text-primary me-3"></div>
+  <span class="text-muted">Chargement...</span>
+</div>
+
+<div *ngIf="error" class="alert alert-danger rounded-3">{{ error }}</div>
+
+<!-- Table -->
+<div *ngIf="!loading && !error" class="users-table">
+  <div class="thead-row">
+    <span></span>
+    <span>Utilisateur</span>
+    <span>Rôle</span>
+    <span>Statut</span>
+    <span>Créé le</span>
+    <span>Actions</span>
+  </div>
+
+  <div *ngFor="let user of users" class="user-row">
+    <!-- Avatar -->
+    <div>
+      <div class="user-avatar">{{ getInitial(user) }}</div>
+    </div>
+
+    <!-- Info -->
+    <div>
+      <div class="user-email">{{ user.email }}</div>
+      <div class="user-name">{{ (user.firstName || '') + ' ' + (user.lastName || '') || '—' }}</div>
+    </div>
+
+    <!-- Role -->
+    <div>
+      <span
+        class="role-badge"
+        [style.background]="getRoleBg(user.role)"
+        [style.color]="getRoleColor(user.role)"
+      >
+        {{ user.role }}
+      </span>
+    </div>
+
+    <!-- Status -->
+    <div>
+      <span class="status-badge" [ngClass]="user.isActive ? 'status-active' : 'status-inactive'">
+        {{ user.isActive ? '✅ Actif' : '❌ Inactif' }}
+      </span>
+    </div>
+
+    <!-- Date -->
+    <div class="date-text">{{ user.createdAt | date: 'dd/MM/yyyy' }}</div>
+
+    <!-- Actions -->
+    <div class="action-row">
+      <button class="act-btn" (click)="openEdit(user)" title="Modifier">✏️</button>
+      <button
+        class="act-btn"
+        (click)="toggleActive(user)"
+        [title]="user.isActive ? 'Désactiver' : 'Activer'"
+      >
+        {{ user.isActive ? '🔒' : '🔓' }}
+      </button>
+      <button class="act-btn danger" (click)="deleteUser(user)" title="Supprimer">🗑️</button>
+    </div>
+  </div>
+
+  <div *ngIf="users.length === 0" class="empty-state">
+    <div style="font-size: 2.5rem; margin-bottom: 10px">👥</div>
+    <p style="color: #64748b">Aucun utilisateur trouvé</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="modal-title">
+        {{ editingUser ? '✏️ Modifier utilisateur' : '➕ Nouvel utilisateur' }}
+      </div>
+      <button
+        style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8"
+        (click)="closeModal()"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div *ngIf="modalError" class="alert alert-danger rounded-3 mb-3" style="font-size: 0.85rem">
+      {{ modalError }}
+    </div>
+
+    <!-- Email (create only) -->
+    <div *ngIf="!editingUser" class="mb-3">
+      <div class="field-label">Email *</div>
+      <input
+        type="email"
+        class="field-input"
+        [(ngModel)]="form.email"
+        placeholder="user@example.com"
+      />
+    </div>
+
+    <!-- Password -->
+    <div class="mb-3">
+      <div class="field-label">
+        {{
+          editingUser ? 'Nouveau mot de passe (laisser vide pour ne pas changer)' : 'Mot de passe *'
+        }}
+      </div>
+      <input
+        type="password"
+        class="field-input"
+        [(ngModel)]="form.password"
+        placeholder="••••••••"
+      />
+    </div>
+
+    <!-- First + Last name -->
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <div class="field-label">Prénom</div>
+        <input type="text" class="field-input" [(ngModel)]="form.firstName" placeholder="Prénom" />
+      </div>
+      <div class="col-6">
+        <div class="field-label">Nom</div>
+        <input type="text" class="field-input" [(ngModel)]="form.lastName" placeholder="Nom" />
+      </div>
+    </div>
+
+    <!-- Role -->
+    <div class="mb-4">
+      <div class="field-label">Rôle *</div>
+      <select class="field-input" [(ngModel)]="form.role">
+        <option value="ADMIN">👑 ADMIN</option>
+        <option value="DEVELOPER">👨‍💻 DEVELOPER</option>
+        <option value="AUDITOR">🔍 AUDITOR</option>
+      </select>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button class="btn-cancel" (click)="closeModal()">Annuler</button>
+      <button class="btn-save" (click)="submit()" [disabled]="saving">
+        <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+        {{ saving ? 'Sauvegarde...' : editingUser ? '💾 Modifier' : '✅ Créer' }}
+      </button>
+    </div>
+  </div>
+</div>

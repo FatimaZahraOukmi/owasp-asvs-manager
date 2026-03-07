@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  role        UserRole  @default(DEVELOPER)
+  firstName   String?
+  lastName    String?
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  projects            Project[]
+  projectRequirements ProjectRequirement[]
+  conversations       Conversation[]
+  messages            Message[]
+  aiRequestLogs       AIRequestLog[]
+  auditLogs           AuditLog[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  DEVELOPER
+  AUDITOR
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  name        String
+  description String?   @db.Text
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  createdById         String
+  createdBy           User                 @relation(fields: [createdById], references: [id])
+  projectRequirements ProjectRequirement[]
+  conversations       Conversation[]
+
+  @@map("projects")
+}
+
+model Requirement {
+  id          String    @id @default(uuid())
+  owaspId     String    @unique @db.VarChar(20)
+  area        String    @db.VarChar(255)
+  asvsLevel   Int
+  cwe         String?   @db.VarChar(20)
+  nist        String?   @db.VarChar(50)
+  description String    @db.Text
+  createdAt   DateTime  @default(now())
+
+  projectRequirements ProjectRequirement[]
+  messages            Message[]
+  aiRequestLogs       AIRequestLog[]
+
+  @@index([area])
+  @@index([asvsLevel])
+  @@map("requirements")
+}
+
+model ProjectRequirement {
+  id                  String        @id @default(uuid())
+  adminDecision       AdminDecision @default(YES)
+  status              Status        @default(NOT_DONE)
+  comment             String?       @db.Text
+  sourceCodeReference String?       @db.VarChar(500)
+  toolUsed            String?       @db.VarChar(255)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  projectId     String
+  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  requirementId String
+  requirement   Requirement @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  updatedById   String?
+  updatedBy     User?       @relation(fields: [updatedById], references: [id])
+
+  auditLogs AuditLog[]
+
+  @@unique([projectId, requirementId])
+  @@index([status])
+  @@map("project_requirements")
+}
+
+enum AdminDecision {
+  YES
+  NO
+  NA
+}
+
+enum Status {
+  DONE
+  IN_PROGRESS
+  NOT_DONE
+  NOT_APPLICABLE
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  action    AuditAction
+  oldValue  String?     @db.Text
+  newValue  String?     @db.Text
+  createdAt DateTime    @default(now())
+
+  projectRequirementId String
+  projectRequirement   ProjectRequirement @relation(fields: [projectRequirementId], references: [id], onDelete: Cascade)
+  userId               String
+  user                 User               @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  ADMIN_DECISION_CHANGE
+  STATUS_CHANGE
+  COMMENT_UPDATE
+  SOURCE_REF_UPDATE
+  TOOL_UPDATE
+  AI_ANALYSIS
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  title     String?   @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  messages Message[]
+
+  @@index([userId])
+  @@map("conversations")
+}
+
+model Message {
+  id          String      @id @default(uuid())
+  role        MessageRole
+  content     String      @db.Text
+  tokensUsed  Int?
+  contextData Json?
+  createdAt   DateTime    @default(now())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  requirementId  String?
+  requirement    Requirement? @relation(fields: [requirementId], references: [id], onDelete: SetNull)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId])
+  @@map("messages")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model AIRequestLog {
+  id         String   @id @default(uuid())
+  prompt     String   @db.Text
+  response   String   @db.Text
+  tokensUsed Int
+  model      String   @db.VarChar(50)
+  createdAt  DateTime @default(now())
+
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  requirementId String?
+  requirement   Requirement? @relation(fields: [requirementId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("ai_request_logs")
+}

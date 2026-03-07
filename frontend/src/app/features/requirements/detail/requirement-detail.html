@@ -1,0 +1,669 @@
+<style>
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .detail-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+  }
+  .card-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .id-badge {
+    background: #1e293b;
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+  .lvl-badge {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .lvl-1 {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .lvl-2 {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .lvl-3 {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .area-badge {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.78rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  .cwe-badge {
+    background: #ede9fe;
+    color: #5b21b6;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .nist-badge {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .desc-text {
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+  .btn-back {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-back:hover {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  /* ====== EVALUATION ====== */
+  .eval-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+    border-top: 4px solid #3b82f6;
+  }
+  .eval-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .eval-subtitle {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin-bottom: 16px;
+  }
+
+  /* Current badge */
+  .current-verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .current-verdict.pass {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .current-verdict.fail {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .current-verdict.na {
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  /* Verdict buttons */
+  .verdict-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .verdict-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 10px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #64748b;
+    position: relative;
+  }
+  .verdict-btn:hover {
+    border-color: #cbd5e1;
+    background: #f1f5f9;
+    transform: translateY(-1px);
+  }
+  .verdict-btn.selected-pass {
+    border-color: #10b981;
+    background: #f0fdf4;
+    color: #065f46;
+  }
+  .verdict-btn.selected-fail {
+    border-color: #ef4444;
+    background: #fef2f2;
+    color: #991b1b;
+  }
+  .verdict-btn.selected-na {
+    border-color: #94a3b8;
+    background: #f8fafc;
+    color: #475569;
+  }
+  .verdict-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .verdict-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .verdict-desc {
+    font-size: 0.68rem;
+    color: #94a3b8;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .verdict-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .selected-pass .verdict-dot {
+    background: #10b981;
+    opacity: 1;
+  }
+  .selected-fail .verdict-dot {
+    background: #ef4444;
+    opacity: 1;
+  }
+  .selected-na .verdict-dot {
+    background: #94a3b8;
+    opacity: 1;
+  }
+
+  /* Notes */
+  .notes-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 6px;
+  }
+  .notes-textarea {
+    width: 100%;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #334155;
+    font-size: 0.875rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 90px;
+    transition:
+      border 0.2s,
+      box-shadow 0.2s;
+    box-sizing: border-box;
+    line-height: 1.6;
+    background: #fff;
+    margin-bottom: 16px;
+  }
+  .notes-textarea::placeholder {
+    color: #cbd5e1;
+  }
+  .notes-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Save */
+  .save-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-save {
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .btn-save:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+  }
+  .btn-save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .save-status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .save-status.success {
+    background: #f0fdf4;
+    color: #10b981;
+    border: 1px solid #bbf7d0;
+  }
+  .save-status.error {
+    background: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+  }
+
+  /* AI Section */
+  .ai-card {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 16px;
+  }
+  .ai-title {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .ai-sub {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+  }
+  .badge-ai {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a78bfa;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+  .lang-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.06);
+    color: #94a3b8;
+  }
+  .lang-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+  }
+  .lang-btn.active {
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  .btn-generate {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-generate:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+  .btn-generate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .code-output {
+    margin-top: 20px;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .code-lang-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #94a3b8;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+  .copy-btn.copied {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #34d399;
+  }
+  .code-block-wrap {
+    position: relative;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .code-block {
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 450px;
+    overflow-y: auto;
+    margin: 0;
+    line-height: 1.7;
+  }
+  .code-block::-webkit-scrollbar {
+    width: 6px;
+  }
+  .code-block::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  .code-block::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  .explanation-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+    border-left: 3px solid #6366f1;
+  }
+  .explanation-text {
+    color: #94a3b8;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .error-box {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+  .error-text {
+    color: #f87171;
+    font-size: 0.82rem;
+  }
+  .spinner-wrap {
+    text-align: center;
+    padding: 24px 0;
+  }
+  .ai-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 10px;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .spinner-text {
+    color: #64748b;
+    font-size: 0.82rem;
+  }
+</style>
+
+<div *ngIf="loading" class="d-flex align-items-center justify-content-center py-5">
+  <div class="spinner-border text-primary me-3"></div>
+  <span class="text-muted">Chargement...</span>
+</div>
+<div *ngIf="error && !loading" class="alert alert-danger rounded-3">{{ error }}</div>
+
+<ng-container *ngIf="requirement && !loading">
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+        <span class="id-badge">{{ requirement.owaspId }}</span>
+        <span class="lvl-badge" [ngClass]="getLevelBadgeClass(requirement.asvsLevel)">{{
+          getLevelLabel(requirement.asvsLevel)
+        }}</span>
+        <span class="area-badge">{{ requirement.area }}</span>
+      </div>
+      <div class="page-sub">Détail du requirement OWASP ASVS</div>
+    </div>
+    <a routerLink="/requirements" class="btn-back">← Retour</a>
+  </div>
+
+  <div class="detail-card">
+    <div class="card-section-title">📋 Description</div>
+    <p class="desc-text">{{ requirement.description }}</p>
+  </div>
+
+  <div class="detail-card">
+    <div class="card-section-title">🔗 Références</div>
+    <div class="d-flex gap-3 flex-wrap">
+      <div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 4px">CWE</div>
+        <span *ngIf="requirement.cwe" class="cwe-badge">CWE-{{ requirement.cwe }}</span>
+        <span *ngIf="!requirement.cwe" style="color: #cbd5e1; font-size: 0.82rem">Non défini</span>
+      </div>
+      <div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 4px">NIST</div>
+        <span *ngIf="requirement.nist" class="nist-badge">{{ requirement.nist }}</span>
+        <span *ngIf="!requirement.nist" style="color: #cbd5e1; font-size: 0.82rem">Non défini</span>
+      </div>
+      <div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 4px">Niveau</div>
+        <span class="lvl-badge" [ngClass]="getLevelBadgeClass(requirement.asvsLevel)"
+          >L{{ requirement.asvsLevel }}</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉVALUATION -->
+  <div class="eval-card">
+    <div class="eval-title">🎯 Mon évaluation</div>
+    <div class="eval-subtitle">Donnez votre verdict sur ce requirement</div>
+
+    <div *ngIf="savedVerdict">
+      <span class="current-verdict" [ngClass]="savedVerdict">
+        {{ getVerdictEmoji(savedVerdict) }} Actuel : {{ getVerdictLabel(savedVerdict) }}
+      </span>
+    </div>
+
+    <div class="verdict-row">
+      <button
+        class="verdict-btn"
+        [class.selected-pass]="selectedVerdict === 'pass'"
+        (click)="selectVerdict('pass')"
+      >
+        <div class="verdict-dot"></div>
+        <div class="verdict-icon">✅</div>
+        <div class="verdict-label">Conforme</div>
+        <div class="verdict-desc">Vérifié et implémenté</div>
+      </button>
+      <button
+        class="verdict-btn"
+        [class.selected-fail]="selectedVerdict === 'fail'"
+        (click)="selectVerdict('fail')"
+      >
+        <div class="verdict-dot"></div>
+        <div class="verdict-icon">❌</div>
+        <div class="verdict-label">Non conforme</div>
+        <div class="verdict-desc">Requirement non satisfait</div>
+      </button>
+      <button
+        class="verdict-btn"
+        [class.selected-na]="selectedVerdict === 'na'"
+        (click)="selectVerdict('na')"
+      >
+        <div class="verdict-dot"></div>
+        <div class="verdict-icon">➖</div>
+        <div class="verdict-label">Non applicable</div>
+        <div class="verdict-desc">Ne s'applique pas ici</div>
+      </button>
+    </div>
+
+    <div class="notes-label">✏️ Notes & observations</div>
+    <textarea
+      class="notes-textarea"
+      [(ngModel)]="evalNotes"
+      placeholder="Ajoutez vos observations, preuves d'implémentation, recommandations..."
+    ></textarea>
+
+    <div class="save-row">
+      <button class="btn-save" [disabled]="saving || !selectedVerdict" (click)="saveEvaluation()">
+        <span *ngIf="!saving">💾 Enregistrer</span>
+        <span *ngIf="saving"
+          ><span class="spinner-border spinner-border-sm" style="width: 13px; height: 13px"></span>
+          Enregistrement...</span
+        >
+      </button>
+      <div *ngIf="saveMsg" class="save-status" [ngClass]="saveMsgType">{{ saveMsg }}</div>
+    </div>
+  </div>
+
+  <!-- AI -->
+  <div class="ai-card">
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <div class="ai-title">🤖 Générer le code d'implémentation</div>
+      <span class="badge-ai">Groq AI</span>
+    </div>
+    <div class="ai-sub">Choisissez un langage puis cliquez sur Générer</div>
+    <div class="lang-selector">
+      <button
+        *ngFor="let lang of languages"
+        class="lang-btn"
+        [class.active]="selectedLanguage === lang.key"
+        [style.background]="selectedLanguage === lang.key ? lang.bg : 'rgba(255,255,255,.06)'"
+        [style.border-color]="selectedLanguage === lang.key ? lang.color : 'transparent'"
+        [style.color]="selectedLanguage === lang.key ? lang.color : '#94a3b8'"
+        (click)="selectLanguage(lang.key)"
+        [disabled]="generating"
+      >
+        <span>{{ lang.icon }}</span
+        ><span>{{ lang.label }}</span>
+        <span *ngIf="selectedLanguage === lang.key" style="font-size: 0.65rem; opacity: 0.7"
+          >✓</span
+        >
+      </button>
+    </div>
+    <button class="btn-generate" (click)="generateCode()" [disabled]="generating">
+      <span *ngIf="!generating">{{ currentLang.icon }} Générer en {{ currentLang.label }}</span>
+      <span *ngIf="generating"
+        ><span class="spinner-border spinner-border-sm me-2"></span>Génération...</span
+      >
+    </button>
+    <div *ngIf="generating" class="spinner-wrap">
+      <div class="ai-spinner"></div>
+      <div class="spinner-text">Groq génère le code {{ currentLang.label }}... ⏳</div>
+    </div>
+    <div *ngIf="generatedCode && !generating" class="code-output">
+      <div *ngIf="generatedExplanation" class="explanation-box">
+        <div class="explanation-text">💡 {{ generatedExplanation }}</div>
+      </div>
+      <div class="code-header">
+        <div class="code-lang-label" [style.color]="currentLang.color">
+          {{ currentLang.icon }} {{ currentLang.label }}
+        </div>
+        <button class="copy-btn" [class.copied]="copied" (click)="copyCode()">
+          {{ copied ? '✅ Copié !' : '📋 Copier' }}
+        </button>
+      </div>
+      <div class="code-block-wrap">
+        <pre class="code-block">{{ generatedCode }}</pre>
+      </div>
+    </div>
+    <div *ngIf="generateError && !generating" class="error-box">
+      <div class="error-text">❌ {{ generateError }}</div>
+    </div>
+  </div>
+</ng-container>

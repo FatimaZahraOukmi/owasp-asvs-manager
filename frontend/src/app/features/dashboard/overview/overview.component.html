@@ -1,0 +1,1181 @@
+<style>
+  .dash {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  .kpi-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .kpi-icon.blue {
+    background: #eff6ff;
+  }
+  .kpi-icon.green {
+    background: #f0fdf4;
+  }
+  .kpi-icon.orange {
+    background: #fffbeb;
+  }
+  .kpi-icon.purple {
+    background: #faf5ff;
+  }
+  .kpi-icon.red {
+    background: #fef2f2;
+  }
+  .kpi-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .kpi-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 2px;
+  }
+  .kpi-value.blue {
+    color: #3b82f6;
+  }
+  .kpi-value.green {
+    color: #10b981;
+  }
+  .kpi-value.orange {
+    color: #f59e0b;
+  }
+  .kpi-value.red {
+    color: #ef4444;
+  }
+
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .chart-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+  }
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .data-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .level-item {
+    margin-bottom: 16px;
+  }
+  .level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .level-bar-wrap {
+    height: 12px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .level-bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+
+  .project-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .project-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .proj-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #0f172a;
+  }
+  .proj-meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .mini-bar {
+    height: 4px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    margin: 6px 0;
+    overflow: hidden;
+  }
+  .mini-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+  .activity-action {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #334155;
+  }
+  .activity-meta {
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  .score-green {
+    color: #10b981;
+    font-weight: 700;
+  }
+  .score-orange {
+    color: #f59e0b;
+    font-weight: 700;
+  }
+  .score-red {
+    color: #ef4444;
+    font-weight: 700;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+  .action-btn.primary {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  }
+  .action-btn.primary:hover {
+    transform: translateY(-1px);
+  }
+  .action-btn.secondary {
+    background: #f8fafc;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+  }
+  .action-btn.secondary:hover {
+    background: #f1f5f9;
+  }
+
+  .proj-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  .proj-row {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f8fafc;
+    transition: background 0.15s;
+  }
+  .proj-row:last-child {
+    border-bottom: none;
+  }
+  .proj-row:hover {
+    background: #fafbff;
+  }
+  .proj-score-big {
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+  .level-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .l1-tag {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .l2-tag {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  /* DEVELOPER */
+  .dev-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .dev-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .domain-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f8fafc;
+  }
+  .domain-item:last-child {
+    border-bottom: none;
+  }
+  .domain-name {
+    font-size: 0.78rem;
+    color: #334155;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .domain-bar-wrap {
+    width: 100px;
+    height: 6px;
+    background: #f1f5f9;
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .domain-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s;
+  }
+  .domain-pct {
+    font-size: 0.72rem;
+    font-weight: 700;
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .ai-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.3);
+  }
+  .ai-card .card-title {
+    color: #e2e8f0;
+  }
+  .ai-feature-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+  }
+  .ai-feature-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: translateX(4px);
+  }
+  .ai-feature-btn:last-child {
+    margin-bottom: 0;
+  }
+  .stats-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stats-mini-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stats-mini-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+  .stats-mini-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  /* AUDITOR */
+  .aud-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .aud-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .score-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+  }
+  .score-ring {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  .score-ring svg {
+    transform: rotate(-90deg);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-ring-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-ring-label {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+  .alert-card {
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .alert-card:last-child {
+    margin-bottom: 0;
+  }
+  .alert-danger-soft {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+  }
+  .alert-warning-soft {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+  }
+  .alert-success-soft {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  .alert-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #334155;
+  }
+  .alert-sub {
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  @media (max-width: 1200px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .charts-row,
+    .dev-grid,
+    .aud-grid {
+      grid-template-columns: 1fr;
+    }
+    .bottom-row,
+    .dev-bottom,
+    .aud-bottom {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<!-- Loading -->
+<div
+  *ngIf="loading"
+  class="d-flex align-items-center justify-content-center"
+  style="min-height: 60vh"
+>
+  <div class="text-center">
+    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem"></div>
+    <p class="text-muted">Chargement du dashboard...</p>
+  </div>
+</div>
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<!-- ======================== ADMIN ======================== -->
+<div *ngIf="!loading && data && role === 'ADMIN'" class="dash">
+  <div class="page-title">Dashboard Administrateur 👑</div>
+  <div class="page-sub">Vue d'ensemble de la conformité OWASP ASVS</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">📁</div>
+      <div>
+        <div class="kpi-value blue">{{ data.stats.totalProjects }}</div>
+        <div class="kpi-label">Projets actifs</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green">👥</div>
+      <div>
+        <div class="kpi-value green">{{ data.stats.totalUsers }}</div>
+        <div class="kpi-label">Utilisateurs</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon orange">🛡️</div>
+      <div>
+        <div class="kpi-value orange">{{ data.stats.totalRequirements }}</div>
+        <div class="kpi-label">Requirements ASVS</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple">🎯</div>
+      <div>
+        <div class="kpi-value" [class]="scoreCss(data.stats.avgScore)">
+          {{ data.stats.avgScore }}%
+        </div>
+        <div class="kpi-label">Score moyen global</div>
+      </div>
+    </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="card-title">🎯 Répartition des statuts</div>
+      <div
+        style="
+          position: relative;
+          height: 220px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <canvas id="donutCanvas"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="card-title">📈 Conformité par domaine ASVS</div>
+      <div style="height: 240px"><canvas id="barCanvas"></canvas></div>
+    </div>
+  </div>
+  <!-- Notifications auditeur ADMIN -->
+  <div
+    *ngIf="data.notifications?.length"
+    class="data-card mb-3"
+    style="border-left: 4px solid #f59e0b; margin-bottom: 16px"
+  >
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <div class="card-title mb-0">🔔 Commentaires auditeur récents</div>
+      <span
+        style="
+          background: #fef3c7;
+          color: #92400e;
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 2px 8px;
+          border-radius: 20px;
+        "
+        >{{ data.notifications.length }} nouveau(x)</span
+      >
+    </div>
+    <div
+      *ngFor="let notif of data.notifications"
+      class="activity-item"
+      style="cursor: pointer"
+      [routerLink]="['/projects', notif.projectRequirement?.project?.id, 'checklist']"
+    >
+      <div class="d-flex align-items-start gap-2">
+        <div style="flex: 1">
+          <div class="activity-action" style="color: #f59e0b">
+            💬 {{ notif.user?.firstName || notif.user?.email }}
+            <span style="color: #94a3b8; font-weight: 400">(Auditeur)</span>
+          </div>
+          <div class="activity-meta">
+            {{ notif.projectRequirement?.project?.name }} —
+            {{ notif.projectRequirement?.requirement?.owaspId }}
+          </div>
+          <div class="activity-meta" style="color: #334155; margin-top: 2px; font-style: italic">
+            "{{ notif.newValue | slice: 0 : 80 }}{{ notif.newValue?.length > 80 ? '...' : '' }}"
+          </div>
+          <div class="activity-meta">{{ notif.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+        <span style="color: #3b82f6; font-size: 0.8rem">→</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="data-card">
+      <div class="card-title">📊 Requirements par niveau</div>
+      <div class="level-item">
+        <div class="level-header">
+          <span><span class="badge bg-success me-1">L1</span> Basique</span
+          ><span class="score-green">{{ data.byLevel.L1 }}</span>
+        </div>
+        <div class="level-bar-wrap">
+          <div
+            class="level-bar"
+            style="background: #10b981"
+            [style.width.%]="(data.byLevel.L1 / data.stats.totalRequirements) * 100"
+          ></div>
+        </div>
+      </div>
+      <div class="level-item">
+        <div class="level-header">
+          <span><span class="badge bg-warning text-dark me-1">L2</span> Standard</span
+          ><span class="score-orange">{{ data.byLevel.L2 }}</span>
+        </div>
+        <div class="level-bar-wrap">
+          <div
+            class="level-bar"
+            style="background: #f59e0b"
+            [style.width.%]="(data.byLevel.L2 / data.stats.totalRequirements) * 100"
+          ></div>
+        </div>
+      </div>
+      <div class="level-item">
+        <div class="level-header">
+          <span><span class="badge bg-danger me-1">L3</span> Avancé</span
+          ><span class="score-red">{{ data.byLevel.L3 }}</span>
+        </div>
+        <div class="level-bar-wrap">
+          <div
+            class="level-bar"
+            style="background: #ef4444"
+            [style.width.%]="(data.byLevel.L3 / data.stats.totalRequirements) * 100"
+          ></div>
+        </div>
+      </div>
+      <div class="mt-3 pt-3" style="border-top: 1px solid #f1f5f9">
+        <div class="card-title mb-2">⚡ Actions rapides</div>
+        <a routerLink="/projects/new" class="action-btn primary">➕ Nouveau projet</a>
+        <a routerLink="/projects" class="action-btn secondary">📁 Tous les projets</a>
+        <a routerLink="/users" class="action-btn secondary">👥 Gérer utilisateurs</a>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="card-title mb-0">📋 Derniers projets</div>
+        <a routerLink="/projects" style="font-size: 0.8rem; color: #3b82f6; text-decoration: none"
+          >Voir tous →</a
+        >
+      </div>
+      <div *ngFor="let p of data.recentProjects" class="project-item">
+        <div class="d-flex justify-content-between align-items-start">
+          <div style="flex: 1; min-width: 0">
+            <div class="proj-name text-truncate">{{ p.name }}</div>
+            <div class="proj-meta">
+              {{ p.createdBy?.email }} · {{ p.createdAt | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 ms-2">
+            <span [class]="scoreCss(p.score)" style="font-size: 0.9rem">{{ p.score }}%</span
+            ><a
+              [routerLink]="['/projects', p.id]"
+              style="color: #3b82f6; font-size: 0.8rem; text-decoration: none"
+              >→</a
+            >
+          </div>
+        </div>
+        <div class="mini-bar">
+          <div
+            class="mini-bar-fill"
+            [style.width.%]="p.score"
+            [style.background]="scoreColor(p.score)"
+          ></div>
+        </div>
+        <div class="proj-meta">{{ p.done }} / {{ p.total }} requirements</div>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="card-title">🕐 Activité récente</div>
+      <div *ngFor="let log of data.recentActivity" class="activity-item">
+        <div class="activity-action">{{ actionLabel(log.action) }}</div>
+        <div class="activity-meta">
+          {{ log.user?.email }} · {{ log.projectRequirement?.project?.name }} /
+          {{ log.projectRequirement?.requirement?.owaspId }}
+        </div>
+        <div class="activity-meta">{{ log.createdAt | date: 'dd/MM HH:mm' }}</div>
+      </div>
+      <div *ngIf="!data.recentActivity?.length" class="text-center text-muted py-3">
+        <div style="font-size: 2rem">📭</div>
+        <small>Aucune activité</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== DEVELOPER ======================== -->
+<div *ngIf="!loading && data && role === 'DEVELOPER'" class="dash">
+  <div class="d-flex justify-content-between align-items-start mb-1">
+    <div>
+      <div class="page-title">Mon Dashboard 👨‍💻</div>
+      <div class="page-sub">Bienvenue, {{ user?.firstName || user?.email }}</div>
+    </div>
+    <a routerLink="/projects/new" class="action-btn primary" style="margin: 0; white-space: nowrap"
+      >➕ Nouveau projet</a
+    >
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">📁</div>
+      <div>
+        <div class="kpi-value blue">{{ data.stats.totalProjects }}</div>
+        <div class="kpi-label">Mes projets</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green">✅</div>
+      <div>
+        <div class="kpi-value green">{{ data.stats.totalDone }}</div>
+        <div class="kpi-label">Requirements validés</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon orange">🔄</div>
+      <div>
+        <div class="kpi-value orange">{{ data.stats.totalInProgress || 0 }}</div>
+        <div class="kpi-label">En cours</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple">🎯</div>
+      <div>
+        <div class="kpi-value" [class]="scoreCss(data.stats.avgScore)">
+          {{ data.stats.avgScore }}%
+        </div>
+        <div class="kpi-label">Score moyen</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dev-grid">
+    <!-- Projets -->
+    <div class="data-card" style="padding: 0; overflow: hidden">
+      <div
+        class="d-flex justify-content-between align-items-center"
+        style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9"
+      >
+        <div class="card-title mb-0">📁 Mes projets</div>
+        <a routerLink="/projects" style="font-size: 0.8rem; color: #3b82f6; text-decoration: none"
+          >Voir tous →</a
+        >
+      </div>
+      <div *ngFor="let p of data.projects" class="proj-row">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div style="flex: 1; min-width: 0">
+            <div class="fw-bold text-truncate" style="color: #0f172a">{{ p.name }}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8">
+              {{ p.description || 'Aucune description' }}
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 ms-3">
+            <div class="text-center">
+              <div class="proj-score-big" [class]="scoreCss(p.score)">{{ p.score }}%</div>
+              <div style="font-size: 0.65rem; color: #94a3b8">global</div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+              <span class="level-tag l1-tag">L1: {{ p.l1Score }}%</span
+              ><span class="level-tag l2-tag">L2: {{ p.l2Score }}%</span>
+            </div>
+            <a
+              [routerLink]="['/projects', p.id, 'checklist']"
+              class="action-btn primary"
+              style="margin: 0; padding: 7px 11px; font-size: 0.78rem; white-space: nowrap"
+              >🛡️ Checklist</a
+            >
+          </div>
+        </div>
+        <div class="mini-bar" style="height: 6px">
+          <div
+            class="mini-bar-fill"
+            [style.width.%]="p.score"
+            [style.background]="scoreColor(p.score)"
+          ></div>
+        </div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 4px">
+          {{ p.done }} / {{ p.total }} requirements · {{ p.inProgress }} en cours
+        </div>
+      </div>
+      <div *ngIf="!data.projects?.length" class="text-center py-5 text-muted">
+        <div style="font-size: 2rem">📭</div>
+        <p style="font-size: 0.85rem">Aucun projet</p>
+        <a
+          routerLink="/projects/new"
+          class="action-btn primary"
+          style="display: inline-flex; margin: 0"
+          >➕ Créer un projet</a
+        >
+      </div>
+    </div>
+
+    <!-- Colonne droite -->
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <!-- Progression par domaine -->
+      <div class="data-card">
+        <div class="card-title">📊 Progression par domaine</div>
+        <div *ngIf="data.byCategory?.length; else noDomain">
+          <div *ngFor="let cat of data.byCategory?.slice(0, 7)" class="domain-item">
+            <div class="domain-name" [title]="cat.area">{{ cat.area.split(' ')[0] }}</div>
+            <div class="domain-bar-wrap">
+              <div
+                class="domain-bar-fill"
+                [style.width.%]="cat.total > 0 ? (cat.done / cat.total) * 100 : 0"
+                [style.background]="scoreColor(cat.total > 0 ? (cat.done / cat.total) * 100 : 0)"
+              ></div>
+            </div>
+            <div
+              class="domain-pct"
+              [class]="scoreCss(cat.total > 0 ? (cat.done / cat.total) * 100 : 0)"
+            >
+              {{ cat.total > 0 ? ((cat.done / cat.total) * 100 | number: '1.0-0') : 0 }}%
+            </div>
+          </div>
+        </div>
+        <ng-template #noDomain
+          ><div class="text-center text-muted py-3">
+            <small>Lancez une analyse IA pour voir la progression</small>
+          </div></ng-template
+        >
+      </div>
+
+      <!-- IA -->
+      <div class="ai-card">
+        <div class="card-title">🤖 Outils IA disponibles</div>
+        <a
+          [routerLink]="firstProjectId ? ['/projects', firstProjectId] : ['/projects']"
+          class="ai-feature-btn"
+        >
+          <span style="font-size: 1.2rem">🔍</span>
+          <div>
+            <div style="font-weight: 600; font-size: 0.82rem">Analyse GitHub</div>
+            <div style="font-size: 0.72rem; color: #94a3b8">Évaluer un repo automatiquement</div>
+          </div>
+          <span style="margin-left: auto">→</span>
+        </a>
+        <a routerLink="/requirements" class="ai-feature-btn">
+          <span style="font-size: 1.2rem">💻</span>
+          <div>
+            <div style="font-weight: 600; font-size: 0.82rem">Générer du code</div>
+            <div style="font-size: 0.72rem; color: #94a3b8">
+              Java / Python / Node.js par requirement
+            </div>
+          </div>
+          <span style="margin-left: auto">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications auditeur -->
+  <div
+    *ngIf="data.notifications?.length"
+    class="data-card mb-3"
+    style="border-left: 4px solid #f59e0b; margin-bottom: 16px"
+  >
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <div class="card-title mb-0">🔔 Commentaires auditeur</div>
+      <span
+        style="
+          background: #fef3c7;
+          color: #92400e;
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 2px 8px;
+          border-radius: 20px;
+        "
+        >{{ data.notifications.length }} nouveau(x)</span
+      >
+    </div>
+    <div
+      *ngFor="let notif of data.notifications"
+      class="activity-item"
+      style="cursor: pointer"
+      [routerLink]="['/projects', notif.projectRequirement?.project?.id, 'checklist']"
+    >
+      <div class="d-flex align-items-start gap-10">
+        <div style="flex: 1">
+          <div class="activity-action" style="color: #f59e0b">
+            💬 Commentaire de {{ notif.user?.firstName || notif.user?.email }}
+          </div>
+          <div class="activity-meta">
+            {{ notif.projectRequirement?.project?.name }} —
+            {{ notif.projectRequirement?.requirement?.owaspId }}
+          </div>
+          <div class="activity-meta" style="color: #334155; margin-top: 2px; font-style: italic">
+            "{{ notif.newValue | slice: 0 : 80 }}{{ notif.newValue?.length > 80 ? '...' : '' }}"
+          </div>
+          <div class="activity-meta">{{ notif.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+        <span style="color: #3b82f6; font-size: 0.8rem">→</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dev-bottom">
+    <!-- Activité -->
+    <div class="data-card">
+      <div class="card-title">🕐 Mes dernières activités</div>
+      <div *ngFor="let log of data.recentActivity" class="activity-item">
+        <div class="activity-action">{{ actionLabel(log.action) }}</div>
+        <div class="activity-meta">
+          {{ log.projectRequirement?.project?.name }} /
+          {{ log.projectRequirement?.requirement?.owaspId }}
+        </div>
+        <div class="activity-meta">{{ log.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+      <div *ngIf="!data.recentActivity?.length" class="text-center text-muted py-3">
+        <div style="font-size: 1.5rem">📭</div>
+        <small>Aucune activité récente</small>
+      </div>
+    </div>
+
+    <!-- Stats rapides -->
+    <div class="data-card">
+      <div class="card-title">📈 Statistiques rapides</div>
+      <div class="stats-mini-grid">
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" style="color: #10b981">{{ data.stats.totalDone }}</div>
+          <div class="stats-mini-label">✅ Faits</div>
+        </div>
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" style="color: #f59e0b">
+            {{ data.stats.totalInProgress || 0 }}
+          </div>
+          <div class="stats-mini-label">🔄 En cours</div>
+        </div>
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" style="color: #ef4444">
+            {{ data.stats.totalNotDone || 0 }}
+          </div>
+          <div class="stats-mini-label">❌ Non faits</div>
+        </div>
+        <div class="stats-mini-card">
+          <div class="stats-mini-value" style="color: #6b7280">{{ data.stats.totalNA || 0 }}</div>
+          <div class="stats-mini-label">➖ N/A</div>
+        </div>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between mb-1">
+          <span style="font-size: 0.78rem; font-weight: 600; color: #334155"
+            >Progression globale</span
+          >
+          <span style="font-size: 0.78rem; font-weight: 700" [class]="scoreCss(data.stats.avgScore)"
+            >{{ data.stats.avgScore }}%</span
+          >
+        </div>
+        <div class="level-bar-wrap" style="height: 10px">
+          <div
+            class="level-bar"
+            [style.background]="scoreColor(data.stats.avgScore)"
+            [style.width.%]="data.stats.avgScore"
+          ></div>
+        </div>
+      </div>
+      <div class="mt-3 pt-3" style="border-top: 1px solid #f1f5f9">
+        <a
+          routerLink="/projects/new"
+          class="action-btn primary"
+          style="font-size: 0.82rem; padding: 9px 12px"
+          >➕ Nouveau projet</a
+        >
+        <a
+          routerLink="/requirements"
+          class="action-btn secondary"
+          style="font-size: 0.82rem; padding: 9px 12px"
+          >🛡️ Voir les requirements</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== AUDITOR ======================== -->
+<div *ngIf="!loading && data && role === 'AUDITOR'" class="dash">
+  <div class="d-flex justify-content-between align-items-start mb-1">
+    <div>
+      <div class="page-title">Dashboard Auditeur 🔍</div>
+      <div class="page-sub">
+        Bienvenue, {{ user?.firstName || user?.email }} —
+        <span
+          style="
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+          "
+          >Mode lecture seule</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">📋</div>
+      <div>
+        <div class="kpi-value blue">{{ data.stats.totalProjects }}</div>
+        <div class="kpi-label">Projets à auditer</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green">✅</div>
+      <div>
+        <div class="kpi-value green">{{ data.stats.totalDone }}</div>
+        <div class="kpi-label">Requirements validés</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon red">❌</div>
+      <div>
+        <div class="kpi-value red">{{ data.stats.totalNotDone || 0 }}</div>
+        <div class="kpi-label">Non conformes</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple">🎯</div>
+      <div>
+        <div class="kpi-value" [class]="scoreCss(data.stats.avgScore)">
+          {{ data.stats.avgScore }}%
+        </div>
+        <div class="kpi-label">Score moyen</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aud-grid">
+    <!-- Projets -->
+    <div class="data-card" style="padding: 0; overflow: hidden">
+      <div style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9">
+        <div class="card-title mb-0">📋 Projets à auditer</div>
+      </div>
+      <div *ngFor="let p of data.projects" class="proj-row">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div style="flex: 1; min-width: 0">
+            <div class="fw-bold text-truncate" style="color: #0f172a">{{ p.name }}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8">
+              {{ p.description || 'Aucune description' }}
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 ms-3">
+            <div class="text-center">
+              <div class="proj-score-big" [class]="scoreCss(p.score)">{{ p.score }}%</div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+              <span class="level-tag l1-tag">L1: {{ p.l1Score }}%</span
+              ><span class="level-tag l2-tag">L2: {{ p.l2Score }}%</span>
+            </div>
+            <a
+              [routerLink]="['/projects', p.id, 'checklist']"
+              class="action-btn secondary"
+              style="margin: 0; padding: 7px 11px; font-size: 0.78rem; white-space: nowrap"
+              >👁️ Auditer</a
+            >
+          </div>
+        </div>
+        <div class="mini-bar" style="height: 6px">
+          <div
+            class="mini-bar-fill"
+            [style.width.%]="p.score"
+            [style.background]="scoreColor(p.score)"
+          ></div>
+        </div>
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 4px">
+          {{ p.done }} / {{ p.total }} requirements validés
+        </div>
+      </div>
+      <div *ngIf="!data.projects?.length" class="text-center py-5 text-muted">
+        <div style="font-size: 2rem">📭</div>
+        <p style="font-size: 0.85rem">Aucun projet à auditer</p>
+      </div>
+    </div>
+
+    <!-- Droite -->
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <!-- Score ring -->
+      <div class="data-card text-center">
+        <div class="card-title">🎯 Conformité globale</div>
+        <div class="score-ring-wrap">
+          <div class="score-ring">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f5f9" stroke-width="12" />
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                [attr.stroke]="scoreColor(data.stats.avgScore)"
+                stroke-width="12"
+                stroke-linecap="round"
+                [attr.stroke-dasharray]="314"
+                [attr.stroke-dashoffset]="314 - (314 * data.stats.avgScore) / 100"
+              />
+            </svg>
+            <div class="score-ring-text">
+              <div class="score-ring-value" [class]="scoreCss(data.stats.avgScore)">
+                {{ data.stats.avgScore }}%
+              </div>
+              <div class="score-ring-label">Score</div>
+            </div>
+          </div>
+          <div style="margin-top: 12px; font-size: 0.78rem; color: #64748b">
+            {{ data.stats.totalDone }} validés
+          </div>
+        </div>
+      </div>
+
+      <!-- Alertes -->
+      <div class="data-card">
+        <div class="card-title">⚠️ Points d'attention</div>
+        <div *ngFor="let p of data.projects?.slice(0, 3)">
+          <div
+            class="alert-card"
+            [ngClass]="
+              p.score < 30
+                ? 'alert-danger-soft'
+                : p.score < 60
+                  ? 'alert-warning-soft'
+                  : 'alert-success-soft'
+            "
+          >
+            <span style="font-size: 1.1rem">{{
+              p.score < 30 ? '🔴' : p.score < 60 ? '🟡' : '🟢'
+            }}</span>
+            <div>
+              <div class="alert-text">{{ p.name }}</div>
+              <div class="alert-sub">
+                {{ p.score }}% —
+                {{ p.score < 30 ? 'Critique' : p.score < 60 ? 'À améliorer' : 'Bon niveau' }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!data.projects?.length" class="text-center text-muted py-2">
+          <small>Aucune alerte</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aud-bottom">
+    <!-- Domaines -->
+    <div class="data-card">
+      <div class="card-title">📊 Conformité par domaine</div>
+      <div *ngIf="data.byCategory?.length; else noAudDomain">
+        <div *ngFor="let cat of data.byCategory?.slice(0, 8)" class="domain-item">
+          <div class="domain-name" [title]="cat.area">{{ cat.area.split(' ')[0] }}</div>
+          <div class="domain-bar-wrap">
+            <div
+              class="domain-bar-fill"
+              [style.width.%]="cat.total > 0 ? (cat.done / cat.total) * 100 : 0"
+              [style.background]="scoreColor(cat.total > 0 ? (cat.done / cat.total) * 100 : 0)"
+            ></div>
+          </div>
+          <div
+            class="domain-pct"
+            [class]="scoreCss(cat.total > 0 ? (cat.done / cat.total) * 100 : 0)"
+          >
+            {{ cat.total > 0 ? ((cat.done / cat.total) * 100 | number: '1.0-0') : 0 }}%
+          </div>
+        </div>
+      </div>
+      <ng-template #noAudDomain
+        ><div class="text-center text-muted py-3">
+          <small>Aucune donnée disponible</small>
+        </div></ng-template
+      >
+    </div>
+
+    <!-- Activité -->
+    <div class="data-card">
+      <div class="card-title">🕐 Activité récente</div>
+      <div *ngFor="let log of data.recentActivity" class="activity-item">
+        <div class="activity-action">{{ actionLabel(log.action) }}</div>
+        <div class="activity-meta">
+          {{ log.user?.email }} · {{ log.projectRequirement?.project?.name }} /
+          {{ log.projectRequirement?.requirement?.owaspId }}
+        </div>
+        <div class="activity-meta">{{ log.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+      <div *ngIf="!data.recentActivity?.length" class="text-center text-muted py-3">
+        <div style="font-size: 1.5rem">📭</div>
+        <small>Aucune activité récente</small>
+      </div>
+    </div>
+  </div>
+</div>

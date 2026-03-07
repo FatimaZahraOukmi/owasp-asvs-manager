@@ -1,0 +1,889 @@
+<style>
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .breadcrumb-custom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+  .breadcrumb-custom a {
+    color: #3b82f6;
+    text-decoration: none;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+  .progress-wrap {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  .prog-bar {
+    height: 10px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    overflow: hidden;
+    display: flex;
+  }
+  .prog-seg {
+    height: 100%;
+    transition: width 0.6s ease;
+  }
+  .filter-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  .filter-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 5px;
+  }
+  .filter-select {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.85rem;
+    color: #334155;
+    outline: none;
+    width: 100%;
+    background: #fff;
+    transition: border 0.2s;
+  }
+  .filter-select:focus {
+    border-color: #6366f1;
+  }
+
+  /* View toggle */
+  .view-toggle {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .view-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #64748b;
+    background: transparent;
+  }
+  .view-btn.active {
+    background: #fff;
+    color: #3b82f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Category cards */
+  .cat-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .cat-header:hover {
+    background: #fafbff;
+  }
+  .cat-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .cat-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cat-score-bar {
+    width: 80px;
+    height: 6px;
+    border-radius: 3px;
+    background: #f1f5f9;
+    overflow: hidden;
+  }
+  .cat-score-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+  .cat-stats {
+    display: flex;
+    gap: 6px;
+  }
+  .cat-stat {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .cs-done {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .cs-progress {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .cs-notdone {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .cat-toggle {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    transition: transform 0.2s;
+  }
+  .cat-toggle.open {
+    transform: rotate(180deg);
+  }
+  .cat-body {
+    border-top: 1px solid #f1f5f9;
+  }
+
+  /* Table */
+  .table-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .table-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .req-row {
+    display: grid;
+    grid-template-columns: 90px 45px 1fr 85px 170px 45px;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid #f8fafc;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .req-row:last-child {
+    border-bottom: none;
+  }
+  .req-row:hover {
+    background: #fafbff;
+  }
+  .thead-row {
+    display: grid;
+    grid-template-columns: 90px 45px 1fr 85px 170px 45px;
+    gap: 12px;
+    padding: 10px 18px;
+    background: #0f172a;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .id-badge {
+    background: #1e293b;
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 0.72rem;
+    padding: 3px 7px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .lvl-badge {
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .lvl-1 {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .lvl-2 {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .lvl-3 {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .status-select {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 5px 8px;
+    font-size: 0.78rem;
+    outline: none;
+    width: 100%;
+    background: #fff;
+    transition: border 0.2s;
+    cursor: pointer;
+  }
+  .status-select:focus {
+    border-color: #6366f1;
+  }
+  .status-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .s-done {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .s-progress {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .s-notdone {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .s-na {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+  .s-none {
+    background: #f8fafc;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+  }
+  .edit-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .edit-btn:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-init {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+  }
+  .btn-init:hover {
+    background: #f1f5f9;
+  }
+  .btn-back {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+  }
+  .reset-btn {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover {
+    background: #f1f5f9;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  }
+  .modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .modal-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 5px;
+  }
+  .field-input {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.875rem;
+    color: #0f172a;
+    outline: none;
+    width: 100%;
+    background: #fff;
+    transition: border 0.2s;
+    font-family: inherit;
+  }
+  .field-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+  .field-input[readonly] {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+  }
+  .btn-save {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-save:hover {
+    transform: translateY(-1px);
+  }
+  .btn-close-modal {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
+
+<!-- Chargement -->
+<div
+  *ngIf="loading"
+  class="d-flex align-items-center justify-content-center"
+  style="min-height: 60vh"
+>
+  <div class="text-center">
+    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem"></div>
+    <p class="text-muted">Chargement de la checklist...</p>
+  </div>
+</div>
+
+<div *ngIf="error" class="alert alert-danger rounded-3">{{ error }}</div>
+
+<div *ngIf="!loading && !error">
+  <!-- En-tête -->
+  <div class="breadcrumb-custom mb-1">
+    <a routerLink="/projects">Projets</a>
+    <span>›</span>
+    <a [routerLink]="['/projects', projectId]">{{ projectName }}</a>
+    <span>›</span>
+    <span style="color: #334155">Checklist ASVS</span>
+  </div>
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <div class="page-title">Checklist OWASP ASVS 🛡️</div>
+      <div class="page-sub">{{ projectName }}</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="view-toggle">
+        <button
+          class="view-btn"
+          [class.active]="viewMode === 'categories'"
+          (click)="viewMode = 'categories'"
+        >
+          📂 Catégories
+        </button>
+        <button class="view-btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+          📋 Liste
+        </button>
+      </div>
+      <button *ngIf="!isAuditor" class="action-btn btn-init" (click)="initChecklist()">
+        🔄 Initialiser
+      </button>
+      <button class="action-btn btn-init" (click)="exportJson()">⬇️ Exporter JSON</button>
+      <a [routerLink]="['/projects', projectId]" class="action-btn btn-back">← Retour</a>
+    </div>
+  </div>
+
+  <!-- Statistiques -->
+  <div *ngIf="stats" class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" style="color: #10b981">{{ stats.done }}</div>
+      <div class="stat-label">✅ Fait</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: #f59e0b">{{ stats.inProgress }}</div>
+      <div class="stat-label">🔄 En cours</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: #ef4444">{{ stats.notDone }}</div>
+      <div class="stat-label">❌ Non fait</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: #6b7280">{{ stats.notApplicable }}</div>
+      <div class="stat-label">➖ N/A</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color: #94a3b8">{{ stats.notStarted }}</div>
+      <div class="stat-label">⬜ Non évalué</div>
+    </div>
+    <div
+      class="stat-card"
+      style="border: 2px solid"
+      [style.border-color]="
+        scoreColor === 'bg-success'
+          ? '#10b981'
+          : scoreColor === 'bg-warning'
+            ? '#f59e0b'
+            : '#ef4444'
+      "
+    >
+      <div
+        class="stat-value"
+        [style.color]="
+          scoreColor === 'bg-success'
+            ? '#10b981'
+            : scoreColor === 'bg-warning'
+              ? '#f59e0b'
+              : '#ef4444'
+        "
+      >
+        {{ stats.score }}%
+      </div>
+      <div class="stat-label">🎯 Score</div>
+    </div>
+  </div>
+
+  <!-- Barre de progression -->
+  <div *ngIf="stats" class="progress-wrap">
+    <div class="d-flex justify-content-between mb-2">
+      <span style="font-size: 0.8rem; font-weight: 600; color: #334155">Progression globale</span>
+      <span style="font-size: 0.8rem; color: #64748b">{{ stats.total }} requirements</span>
+    </div>
+    <div class="prog-bar">
+      <div
+        class="prog-seg"
+        style="background: #10b981"
+        [style.width.%]="(stats.done / stats.total) * 100"
+      ></div>
+      <div
+        class="prog-seg"
+        style="background: #f59e0b"
+        [style.width.%]="(stats.inProgress / stats.total) * 100"
+      ></div>
+      <div
+        class="prog-seg"
+        style="background: #ef4444"
+        [style.width.%]="(stats.notDone / stats.total) * 100"
+      ></div>
+      <div
+        class="prog-seg"
+        style="background: #e2e8f0"
+        [style.width.%]="(stats.notApplicable / stats.total) * 100"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filter-card">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <div class="filter-label">Niveau ASVS</div>
+        <select class="filter-select" [(ngModel)]="selectedLevel" (ngModelChange)="applyFilters()">
+          <option [ngValue]="null">Tous les niveaux</option>
+          <option [ngValue]="1">L1 — Basique</option>
+          <option [ngValue]="2">L1 + L2 — Standard</option>
+          <option [ngValue]="3">L1 + L2 + L3 — Avancé</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <div class="filter-label">Domaine</div>
+        <select class="filter-select" [(ngModel)]="selectedArea" (ngModelChange)="applyFilters()">
+          <option value="">Tous les domaines</option>
+          <option *ngFor="let area of areas" [value]="area">{{ translateArea(area) }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <div class="filter-label">Statut</div>
+        <select class="filter-select" [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()">
+          <option value="">Tous les statuts</option>
+          <option value="DONE">✅ Fait</option>
+          <option value="IN_PROGRESS">🔄 En cours</option>
+          <option value="NOT_DONE">❌ Non fait</option>
+          <option value="NOT_APPLICABLE">➖ Non applicable</option>
+          <option value="null">⬜ Non évalué</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button class="reset-btn w-100" (click)="resetFilters()">✕ Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE CATÉGORIES -->
+  <ng-container *ngIf="viewMode === 'categories'">
+    <div *ngFor="let cat of categories" class="cat-card">
+      <div class="cat-header" (click)="toggleCategory(cat)">
+        <div>
+          <div class="cat-name">{{ cat.name }}</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px">
+            {{ cat.total }} requirements
+          </div>
+        </div>
+        <div class="cat-meta">
+          <div class="cat-stats">
+            <span *ngIf="cat.done > 0" class="cat-stat cs-done">✅ {{ cat.done }}</span>
+            <span *ngIf="cat.inProgress > 0" class="cat-stat cs-progress"
+              >🔄 {{ cat.inProgress }}</span
+            >
+            <span *ngIf="cat.notDone > 0" class="cat-stat cs-notdone">❌ {{ cat.notDone }}</span>
+          </div>
+          <div style="text-align: right">
+            <div
+              style="font-size: 0.75rem; font-weight: 700"
+              [style.color]="getCategoryColor(getCategoryScore(cat))"
+            >
+              {{ getCategoryScore(cat) }}%
+            </div>
+            <div class="cat-score-bar" style="margin-top: 3px">
+              <div
+                class="cat-score-fill"
+                [style.width.%]="getCategoryScore(cat)"
+                [style.background]="getCategoryColor(getCategoryScore(cat))"
+              ></div>
+            </div>
+          </div>
+          <span class="cat-toggle" [class.open]="cat.expanded">▼</span>
+        </div>
+      </div>
+
+      <!-- Contenu de la catégorie -->
+      <div class="cat-body" *ngIf="cat.expanded">
+        <div class="thead-row">
+          <span>ID</span>
+          <span>Niv.</span>
+          <span>Description</span>
+          <span>CWE</span>
+          <span>Statut</span>
+          <span></span>
+        </div>
+        <div *ngFor="let item of cat.items" class="req-row">
+          <div>
+            <span class="id-badge">{{ item.owaspId }}</span>
+          </div>
+          <div>
+            <span
+              class="lvl-badge"
+              [ngClass]="item.asvsLevel === 1 ? 'lvl-1' : item.asvsLevel === 2 ? 'lvl-2' : 'lvl-3'"
+            >
+              L{{ item.asvsLevel }}
+            </span>
+          </div>
+          <div>
+            <div style="font-size: 0.82rem; color: #334155; line-height: 1.4">
+              {{ item.description }}
+            </div>
+            <div *ngIf="item.comment" style="font-size: 0.75rem; color: #3b82f6; margin-top: 3px">
+              💬 {{ item.comment }}
+            </div>
+          </div>
+          <div>
+            <span *ngIf="item.cwe" style="font-size: 0.75rem; color: #6366f1; font-weight: 600"
+              >CWE-{{ item.cwe }}</span
+            >
+            <span *ngIf="!item.cwe" style="color: #cbd5e1">—</span>
+          </div>
+          <div>
+            <span
+              *ngIf="isAuditor"
+              class="status-badge"
+              [ngClass]="
+                item.status === 'DONE'
+                  ? 's-done'
+                  : item.status === 'IN_PROGRESS'
+                    ? 's-progress'
+                    : item.status === 'NOT_DONE'
+                      ? 's-notdone'
+                      : item.status === 'NOT_APPLICABLE'
+                        ? 's-na'
+                        : 's-none'
+              "
+            >
+              {{ getStatusLabel(item.status) }}
+            </span>
+            <select
+              *ngIf="!isAuditor"
+              class="status-select"
+              [value]="item.status || ''"
+              (change)="onStatusChange(item, $any($event.target).value)"
+              [disabled]="saving === item.requirementId"
+            >
+              <option value="">⬜ Non évalué</option>
+              <option value="DONE">✅ Fait</option>
+              <option value="IN_PROGRESS">🔄 En cours</option>
+              <option value="NOT_DONE">❌ Non fait</option>
+              <option value="NOT_APPLICABLE">➖ Non applicable</option>
+            </select>
+          </div>
+          <div>
+            <button class="edit-btn" (click)="openDetail(item)" title="Détails">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="categories.length === 0" class="text-center py-5">
+      <div style="font-size: 2.5rem; margin-bottom: 10px">🔍</div>
+      <p style="color: #64748b">Aucun requirement trouvé</p>
+      <button class="reset-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    </div>
+  </ng-container>
+
+  <!-- VUE LISTE -->
+  <ng-container *ngIf="viewMode === 'list'">
+    <div class="table-card">
+      <div class="table-header">
+        <span style="font-size: 0.875rem; font-weight: 600; color: #334155"
+          >{{ filteredChecklist.length }} requirement(s)</span
+        >
+        <span
+          *ngIf="isAuditor"
+          style="
+            font-size: 0.78rem;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+          "
+        >
+          👁️ Lecture seule (commentaires autorisés)
+        </span>
+      </div>
+      <div class="thead-row">
+        <span>ID</span><span>Niv.</span><span>Description</span><span>CWE</span><span>Statut</span
+        ><span></span>
+      </div>
+      <div *ngFor="let item of filteredChecklist" class="req-row">
+        <div>
+          <span class="id-badge">{{ item.owaspId }}</span>
+        </div>
+        <div>
+          <span
+            class="lvl-badge"
+            [ngClass]="item.asvsLevel === 1 ? 'lvl-1' : item.asvsLevel === 2 ? 'lvl-2' : 'lvl-3'"
+            >L{{ item.asvsLevel }}</span
+          >
+        </div>
+        <div>
+          <div style="font-size: 0.82rem; color: #334155; line-height: 1.4">
+            {{ item.description }}
+          </div>
+          <div *ngIf="item.comment" style="font-size: 0.75rem; color: #3b82f6; margin-top: 3px">
+            💬 {{ item.comment }}
+          </div>
+        </div>
+        <div>
+          <span *ngIf="item.cwe" style="font-size: 0.75rem; color: #6366f1; font-weight: 600"
+            >CWE-{{ item.cwe }}</span
+          >
+          <span *ngIf="!item.cwe" style="color: #cbd5e1">—</span>
+        </div>
+        <div>
+          <span
+            *ngIf="isAuditor"
+            class="status-badge"
+            [ngClass]="
+              item.status === 'DONE'
+                ? 's-done'
+                : item.status === 'IN_PROGRESS'
+                  ? 's-progress'
+                  : item.status === 'NOT_DONE'
+                    ? 's-notdone'
+                    : item.status === 'NOT_APPLICABLE'
+                      ? 's-na'
+                      : 's-none'
+            "
+          >
+            {{ getStatusLabel(item.status) }}
+          </span>
+          <select
+            *ngIf="!isAuditor"
+            class="status-select"
+            [value]="item.status || ''"
+            (change)="onStatusChange(item, $any($event.target).value)"
+            [disabled]="saving === item.requirementId"
+          >
+            <option value="">⬜ Non évalué</option>
+            <option value="DONE">✅ Fait</option>
+            <option value="IN_PROGRESS">🔄 En cours</option>
+            <option value="NOT_DONE">❌ Non fait</option>
+            <option value="NOT_APPLICABLE">➖ Non applicable</option>
+          </select>
+        </div>
+        <div>
+          <button class="edit-btn" (click)="openDetail(item)" title="Détails">✏️</button>
+        </div>
+      </div>
+      <div *ngIf="filteredChecklist.length === 0" class="text-center py-5">
+        <div style="font-size: 2.5rem; margin-bottom: 10px">🔍</div>
+        <p style="color: #64748b">Aucun requirement trouvé</p>
+        <button class="reset-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Modal détail -->
+<div *ngIf="selectedItem" class="modal-overlay" (click)="selectedItem = null">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <span class="id-badge me-2">{{ selectedItem.owaspId }}</span>
+        <div class="modal-title mt-2">Détails du requirement</div>
+      </div>
+      <button
+        style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8"
+        (click)="selectedItem = null"
+      >
+        ✕
+      </button>
+    </div>
+    <p class="modal-desc">{{ selectedItem.description }}</p>
+
+    <div class="mb-3">
+      <div class="field-label">
+        💬 Commentaire
+        <span
+          *ngIf="isAuditor"
+          style="font-size: 0.7rem; color: #3b82f6; font-weight: normal; margin-left: 6px"
+          >(observation d'audit)</span
+        >
+      </div>
+      <textarea
+        class="field-input"
+        rows="3"
+        [(ngModel)]="editComment"
+        placeholder="Ajouter un commentaire ou une observation..."
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <div class="field-label">🔗 Référence code source</div>
+      <input
+        type="text"
+        class="field-input"
+        [(ngModel)]="editSourceRef"
+        [readonly]="isAuditor"
+        placeholder="Ex: src/auth/login.ts#L45"
+      />
+    </div>
+
+    <div class="mb-4">
+      <div class="field-label">🛠️ Outil utilisé</div>
+      <input
+        type="text"
+        class="field-input"
+        [(ngModel)]="editToolUsed"
+        [readonly]="isAuditor"
+        placeholder="Ex: OWASP ZAP, Burp Suite..."
+      />
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button class="btn-close-modal" (click)="selectedItem = null">Fermer</button>
+      <button class="btn-save" (click)="saveDetail()">💾 Sauvegarder</button>
+    </div>
+  </div>
+</div>
