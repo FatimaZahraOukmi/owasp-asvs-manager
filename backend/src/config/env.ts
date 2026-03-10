@@ -51,8 +51,6 @@ if (!env.JWT_SECRET || env.JWT_SECRET.includes("default")) {
   );
 }
 
-if (!env.OPENAI_API_KEY && env.NODE_ENV === "production") {
-  throw new Error("OPENAI_API_KEY is required in production");
-}
+// OpenAI not used - using Groq instead
 
 export default env;
