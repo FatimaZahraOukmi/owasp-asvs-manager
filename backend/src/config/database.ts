@@ -8,6 +8,11 @@ declare global {
 export const prisma =
   global.prisma ||
   new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL + "?connection_limit=3&pool_timeout=10",
+      },
+    },
     log:
       env.NODE_ENV === "development"
         ? [
@@ -22,7 +27,6 @@ if (env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }
 
-// Gestion propre de la déconnexion
 process.on("beforeExit", async () => {
   await prisma.$disconnect();
 });
